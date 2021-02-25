@@ -1,0 +1,2 @@
+# XegBlaz
+Blazor WebApp Practice
