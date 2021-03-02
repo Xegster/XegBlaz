@@ -1,4 +1,15 @@
-﻿<div style="text-align:center;vertical-align:middle">@Slot.Multiplier</div>
+﻿
+@if (Slot.CurrentToken != null)
+{
+	<table class="xegstar-player-board">
+		<tr>
+			<td class="token @TokenClass">
+				@Slot.CurrentToken.Value
+			</td>
+		</tr>
+	</table>
+}
+<div>@("x" + Slot.Multiplier)</div>
 
 @code {
 
