@@ -14,6 +14,8 @@ namespace XegStar
 		{
 			var ret = new XegStarGame
 			{
+				CurrentState = GameState.ChoosePlayers,
+				Settings = new Settings(),
 				Players = new List<Player>()
 				{
 					new Player
@@ -31,7 +33,7 @@ namespace XegStar
 				{
 					new Slot
 					{
-						Multiplier = 3.0
+						Multiplier = 3.0,
 					},
 					new Slot
 					{

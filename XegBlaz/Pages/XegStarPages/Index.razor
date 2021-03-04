@@ -1,103 +1,188 @@
 ﻿@page "/XegStar"
 
-<h1>XegStar</h1>
+	<div class="align-content-center">
+		<h1>XegStar</h1>
+	</div>
+	@if (CurrentState == GameState.ChoosePlayers)
+	{
+		<div class="container options-dialog" style="padding-left:0px;">
+			<div class="row">
+				<div class="col-lg-12">
+					Number of Players? 6969
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-1">
+					<button class="btn btn-primary" @onclick="() => SetPlayerCount(1)">1</button>
+				</div>
+				<div class="col-lg-1">
+					<button class="btn btn-danger" @onclick="() => SetPlayerCount(2)">2</button>
+				</div>
+			</div>
+		</div>
+	}
+	else if (CurrentState == GameState.ChooseDifficulty)
+	{
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12">
+					Difficulty?
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-4">
+					<button class="btn btn-primary" @onclick="() => SetDifficulty(Difficulty.Easy)">Easy</button>
+				</div>
+				<div class="col-lg-4">
+					<button class="btn btn-warning" @onclick="() => SetDifficulty(Difficulty.Medium)">Medium</button>
+				</div>
+				<div class="col-lg-4">
+					<button class="btn btn-danger" @onclick="() => SetDifficulty(Difficulty.Hard)">Hard</button>
+				</div>
+			</div>
+		</div>
+	}
+	else
+	{
+		@if (CurrentState == GameState.Player1Turn)
+		{
+			<h2>@(Player1.Name + "'s") Turn</h2>
+		}
+		else
+		{
+			<h2>@(Player2.Name + "'s") Turn</h2>
+		}
 
-<table class="xegstar-game-board">
-	<tr>
-		<td class="xegstar-player-board">
-			Player 15
-			<table class="xegstar-player-board">
-				@foreach (var token in Player1.Tokens)
-				{
-					<tr>
-						<td draggable="true" class="draggable token red-token" @ondragstart="@(() => HandleDragStart(token))">
-							@token.Value
-						</td>
-					</tr>
-
-				}
-
-			</table>
-		</td>
-		<td class="xegstar-game-board">
-			<table class="test-table">
-				<tr class="test-table-top">
-					<td class="test-table"><p>&nbsp;</p></td>
-					<td class="test-table"
-						style="text-align:center;vertical-align:middle"
-						ondragover="event.preventDefault();"
-						@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[0]))"
-						@ondrop="HandleDrop"
-						@ondragleave="HandleDragLeave">
-						<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[0]" />
-					</td>
-					<td class="test-table"><p>&nbsp;</p></td>
-				</tr>
-				<tr class="test-table-middle">
-					<td class="test-table" style="text-align:right;vertical-align:top"
-						ondragover="event.preventDefault();"
-						@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[1]))"
-						@ondrop="HandleDrop"
-						@ondragleave="HandleDragLeave">
-						<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[1]" />
-					</td>
-					<td class="test-table" style="text-align:center;vertical-align:middle"
-						ondragover="event.preventDefault();"
-						@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[2]))"
-						@ondrop="HandleDrop"
-						@ondragleave="HandleDragLeave">
-						<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[2]" />
-					</td>
-					<td class="test-table" style="text-align:left;vertical-align:top"
-						ondragover="event.preventDefault();"
-						@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[3]))"
-						@ondrop="HandleDrop"
-						@ondragleave="HandleDragLeave">
-						<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[3]" />
-					</td>
-				</tr>
-				<tr class="test-table-bottom">
+		<table class="xegstar-game-board">
+			@if (CurrentState == GameState.Finish)
+			{
+				<tr>
 					<td colspan="3">
-						<table class="test-table-bottom">
-							<tr class="test-table">
-								<td class="test-table"><p>&nbsp;</p></td>
-								<td class="test-table" style="text-align:center;vertical-align:top"
-									ondragover="event.preventDefault();"
-									@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[4]))"
-									@ondrop="HandleDrop"
-									@ondragleave="HandleDragLeave">
-									<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[4]" />
-								</td>
-								<td class="test-table" style="text-align:center;vertical-align:top"
-									ondragover="event.preventDefault();"
-									@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[5]))"
-									@ondrop="HandleDrop"
-									@ondragleave="HandleDragLeave">
-									<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[5]" />
-								</td>
-								<td class="test-table"><p>&nbsp;</p></td>
-							</tr>
-						</table>
+						@if (WinType == WinType.Draw)
+						{
+							<h1 class="end-draw">Draw! :(</h1>
+						}
+						else
+						{
+							<h1 class="end-win">@Winner.Name Wins with @Player1Score points! </h1>
+						}
 					</td>
 				</tr>
-			</table>
-		</td>
-		<td class="xegstar-player-board">
-			Player 2
-			<table class="xegstar-player-board">
-				@foreach (var token in Player2.Tokens)
-				{
-					<tr>
-						<td draggable="true" class="draggable token blue-token" @ondragstart="@(() => HandleDragStart(token))">
-							@token.Value
-						</td>
-					</tr>
+			}
+			<tr>
+				<td class="xegstar-player-board @PlayerClass(1)">
+					<h3 class="player-1-score">@Player1Score</h3>
+					@Player1.Name
+					@if (CurrentState == GameState.Player1Turn)
+					{
+						<h2>GO</h2>
+					}
+					else
+					{
+						<h2>Wait</h2>
+					}
+					<table class="xegstar-player-board">
+						@foreach (var token in Player1.Tokens)
+						{
+							<tr>
+								<td draggable="@Draggable(1)" class="draggable token red-token" @ondragstart="@(() => HandleDragStart(token))">
+									@token.Value
+								</td>
+							</tr>
 
-				}
-			</table>
-		</td>
-	</tr>
-</table>
+						}
 
+					</table>
+				</td>
+				<td class="xegstar-game-board">
+					<table class="test-table">
+						<tr class="test-table-top">
+							<td class="test-table"><p>&nbsp;</p></td>
+							<td class="test-table"
+								style="text-align:center;vertical-align:middle"
+								ondragover="event.preventDefault();"
+								@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[0]))"
+								@ondrop="HandleDrop"
+								@ondragleave="HandleDragLeave">
+								<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[0]" />
+							</td>
+							<td class="test-table"><p>&nbsp;</p></td>
+						</tr>
+						<tr class="test-table-middle">
+							<td class="test-table" style="text-align:right;vertical-align:top"
+								ondragover="event.preventDefault();"
+								@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[1]))"
+								@ondrop="HandleDrop"
+								@ondragleave="HandleDragLeave">
+								<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[1]" />
+							</td>
+							<td class="test-table" style="text-align:center;vertical-align:middle"
+								ondragover="event.preventDefault();"
+								@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[2]))"
+								@ondrop="HandleDrop"
+								@ondragleave="HandleDragLeave">
+								<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[2]" />
+							</td>
+							<td class="test-table" style="text-align:left;vertical-align:top"
+								ondragover="event.preventDefault();"
+								@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[3]))"
+								@ondrop="HandleDrop"
+								@ondragleave="HandleDragLeave">
+								<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[3]" />
+							</td>
+						</tr>
+						<tr class="test-table-bottom">
+							<td colspan="3">
+								<table class="test-table-bottom">
+									<tr class="test-table">
+										<td class="test-table"><p>&nbsp;</p></td>
+										<td class="test-table" style="text-align:center;vertical-align:top"
+											ondragover="event.preventDefault();"
+											@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[4]))"
+											@ondrop="HandleDrop"
+											@ondragleave="HandleDragLeave">
+											<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[4]" />
+										</td>
+										<td class="test-table" style="text-align:center;vertical-align:top"
+											ondragover="event.preventDefault();"
+											@ondragenter="@(() => HandleDragEnter(CurrentGame.Slots[5]))"
+											@ondrop="HandleDrop"
+											@ondragleave="HandleDragLeave">
+											<XegStarSlot CurrentGame="CurrentGame" Slot="CurrentGame.Slots[5]" />
+										</td>
+										<td class="test-table"><p>&nbsp;</p></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td class="xegstar-player-board @PlayerClass(2)">
+					<h3 class="player-2-score">@Player2Score</h3>
+					@Player2.Name
+					@if (CurrentState == GameState.Player2Turn)
+					{
+						<h2>GO</h2>
+					}
+					else
+					{
+						<h2>Wait</h2>
+					}
+					<table class="xegstar-player-board">
+						@foreach (var token in Player2.Tokens)
+						{
+							<tr>
+								<td draggable="@Draggable(2)" class="draggable token blue-token" @ondragstart="@(() => HandleDragStart(token))">
+									@token.Value
+								</td>
+							</tr>
+
+						}
+					</table>
+				</td>
+			</tr>
+		</table>
+
+	}
 
 

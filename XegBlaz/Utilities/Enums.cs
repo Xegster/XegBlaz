@@ -1,0 +1,4 @@
+﻿namespace XegBlaz.Utilities
+{
+
+}
