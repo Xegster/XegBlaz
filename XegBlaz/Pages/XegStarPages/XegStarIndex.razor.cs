@@ -1,10 +1,9 @@
 ﻿using XegStar;
 using XegStar.Models;
 using XegStar.Utilities;
-
 namespace XegBlaz.Pages.XegStarPages
 {
-	public partial class Index
+	public partial class XegStarIndex
 	{
 		#region Game Properties
 		protected XegStarGame CurrentGame { get; set; }
@@ -96,5 +95,6 @@ namespace XegBlaz.Pages.XegStarPages
 			CurrentGame.TakeTurn(TargetSlot, DragToken);
 
 		}
+
 	}
 }

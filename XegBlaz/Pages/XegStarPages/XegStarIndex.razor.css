@@ -46,11 +46,11 @@ td.can-drop {
 }
 
 ::deep td.blue-token {
-	background-image: url("../Images/BlueToken.png");
+	background-image: url("/Images/BlueToken.png");
 }
 
 ::deep td.red-token {
-	background-image: url("../Images/RedToken.png");
+	background-image: url("/Images/RedToken.png");
 }
 
 ::deep td.token {
@@ -97,7 +97,7 @@ tr.test-table-bottom {
 }
 
 td.test-table {
-	border: 5px solid green;
+	border: 5px solid cyan;
 }
 
 p.test-table {

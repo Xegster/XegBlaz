@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using XegStar.Models;
-
 namespace XegBlaz.Pages.XegStarPages
 {
 	public partial class XegStarSlot
@@ -14,5 +13,6 @@ namespace XegBlaz.Pages.XegStarPages
 		protected Player Player2 => CurrentGame.Players[1];
 
 		protected string TokenClass => (Slot.CurrentToken != null && Slot.CurrentToken.Owner.Id == Player1.Id) ? "red-token" : "blue-token";
+
 	}
 }

@@ -1,0 +1,27 @@
+﻿@inject IJSRuntime JSRuntime
+
+<span @onclick="CopyTextToClipboard"
+	  @onmouseover="@(() => SelectText(true))"
+	  @onmouseout="@(() => SelectText(false))"
+	  id="@spanDomElementId"
+	  title="Copy to clipboard"
+	  style="cursor:pointer;">
+	@Text
+</span>
+
+@code {
+	[Parameter]
+	public string Text { get; set; }
+
+	string spanDomElementId = "c2cbid";
+
+	private async Task CopyTextToClipboard()
+	{
+		await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", Text);
+	}
+
+	private async Task SelectText(bool select)
+	{
+		await JSRuntime.InvokeVoidAsync("clipboardCopy.selectText", spanDomElementId, select);
+	}
+}
