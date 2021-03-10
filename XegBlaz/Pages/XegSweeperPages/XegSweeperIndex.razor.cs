@@ -68,6 +68,7 @@ namespace XegBlaz.Pages.XegSweeperPages
 			CurrentBoard = null;
 			CurrentSettings = null;
 			GameStarted = false;
+			GameTime = new TimeSpan();
 		}
 
 		#endregion

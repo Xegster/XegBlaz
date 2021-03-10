@@ -67,8 +67,14 @@ namespace XegSweeper.Models
 		{
 			var cell = Cells[row, column];
 			if (!cell.Flagged)
+			{
 				cell.Flagged = true;
-			else cell.Flagged = false;
+				CheckWin();
+			}
+			else
+			{
+				cell.Flagged = false;
+			}
 		}
 
 		public void Uncover(int row, int column)
