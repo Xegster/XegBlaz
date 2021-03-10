@@ -1,0 +1,87 @@
+﻿h3 {
+	color: cyan;
+}
+
+table.sweeper {
+	width: auto;
+	height: auto;
+}
+
+tr.sweeper {
+	height: 50px;
+
+}
+
+td.sweeper {
+	border: 5px solid slategray;
+	width: 50px;
+	min-width: 50px;
+	max-width: 50px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+td.covered {
+	background-color: lightgray;
+}
+
+.clock {
+	font-size: 40px;
+}
+.clock-stopped-lose {
+	color: red;
+}
+.clock-stopped-win {
+	color: green;
+}
+
+.result {
+	font-size: 40px;
+}
+.result-win {
+	color: green;
+}
+.result-lose {
+	color: red;
+}
+
+img.bomb {
+	height: 45px;
+	width: 45px;
+	background-color: red;
+}
+img.flag {
+	height: 45px;
+	width: 45px;
+}
+
+p.clue {
+	font-size: 26px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+}
+
+p.clue-1 {
+	color: green;
+}
+p.clue-2 {
+	color: yellow;
+}
+p.clue-3 {
+	color: deeppink;
+}
+p.clue-4 {
+	color: blue;
+}
+p.clue-5 {
+	color: purple;
+}
+p.clue-6 {
+	color: orangered;
+}
+p.clue-7 {
+	color: cyan;
+}
+p.clue-8 {
+	color: hotpink;
+}

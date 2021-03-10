@@ -3,7 +3,7 @@
 <div class="align-content-center">
 	<h1>XegStar</h1>
 </div>
-@if (CurrentState == GameState.ChoosePlayers)
+@if (CurrentState == XegStar.Utilities.GameState.ChoosePlayers)
 {
 	<div class="container options-dialog" style="padding-left: 0px; margin-left: 0px;">
 		<div class="row">
@@ -21,7 +21,7 @@
 		</div>
 	</div>
 }
-else if (CurrentState == GameState.ChooseDifficulty)
+else if (CurrentState == XegStar.Utilities.GameState.ChooseDifficulty)
 {
 	<div class="container options-dialog" style="padding-left: 0px; margin-left: 0px;">
 		<div class="row">
@@ -49,7 +49,7 @@ else
 	<table class="xegstar-game-board">
 		<tr>
 			<td colspan="3" align="center" class="xegstar-game-board-turn-indicator">
-				@if (CurrentState == GameState.Player1Turn)
+				@if (CurrentState == XegStar.Utilities.GameState.Player1Turn)
 				{
 					<h2 class="xegstar-game-board-turn-indicator">@(Player1.Name + "'sssss") Turns2</h2>
 				}
@@ -60,7 +60,7 @@ else
 
 			</td>
 		</tr>
-		@if (CurrentState == GameState.Finish)
+		@if (CurrentState == XegStar.Utilities.GameState.Finish)
 		{
 			<tr>
 				<td colspan="3">
@@ -79,7 +79,7 @@ else
 			<td class="xegstar-player-board @PlayerClass(1)">
 				<h3 class="player-1-score">@Player1Score</h3>
 				@Player1.Name
-				@if (CurrentState == GameState.Player1Turn)
+				@if (CurrentState == XegStar.Utilities.GameState.Player1Turn)
 				{
 					<h2>GO</h2>
 				}
@@ -166,7 +166,7 @@ else
 			<td class="xegstar-player-board @PlayerClass(2)">
 				<h3 class="player-2-score">@Player2Score</h3>
 				@Player2.Name
-				@if (CurrentState == GameState.Player2Turn)
+				@if (CurrentState == XegStar.Utilities.GameState.Player2Turn)
 				{
 					<h2>GO</h2>
 				}

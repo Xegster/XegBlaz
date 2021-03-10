@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\XegStar\XegStar.csproj" />
+    <ProjectReference Include="..\XegSweeper\XegSweeper.csproj" />
   </ItemGroup>
 
   <ItemGroup>
