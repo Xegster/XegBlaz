@@ -55,10 +55,43 @@ img.flag {
 	width: 45px;
 }
 
+table.stats {
+	width: auto;
+	height: auto;
+}
+tr.stats {
+	height: 150px;
+}
+td.stats {
+	position: relative;
+	text-align: center;
+	color: white;
+
+	text-align: center;
+	vertical-align: middle;
+}
+img.stats {
+	height: 150px;
+	width: 150px;
+}
+div.stats-text {
+	color: red;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
 p.clue {
 	font-size: 26px;
 	margin: 0px 0px 0px 0px;
 	padding: 0px 0px 0px 0px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 p.clue-1 {

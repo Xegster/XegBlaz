@@ -58,7 +58,10 @@ namespace XegBlaz.Pages.XegSweeperPages
 		{
 			if (args.Button == 2)
 			{
+				if (!TimeStarted)
+					RunGameTimer();
 				CurrentBoard.Flag(row, column);
+				CheckGameState();
 			}
 		}
 		protected void StartOver()

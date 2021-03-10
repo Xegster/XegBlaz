@@ -20,7 +20,7 @@
 					Width:
 				</div>
 				<div class="col-lg-3">
-					<input value="@CurrentSettings.Width" />
+					<input @bind="@CurrentSettings.Width" />
 				</div>
 			</div>
 			<div class="row">
@@ -28,7 +28,7 @@
 					Height:
 				</div>
 				<div class="col-lg-3">
-					<input value="@CurrentSettings.Height" />
+					<input @bind="@CurrentSettings.Height" />
 				</div>
 			</div>
 			<div class="row">
@@ -36,7 +36,7 @@
 					Mines:
 				</div>
 				<div class="col-lg-3">
-					<input value="@CurrentSettings.MineCount" />
+					<input @bind="@CurrentSettings.MineCount" />
 				</div>
 			</div>
 			<div class="row">
@@ -49,16 +49,34 @@
 }
 else
 {
-	@if (Won)
-	{
-		<p class="result result-win">You Won!</p>
-	}
-	else if (Lost)
-	{
-		<p class="result result-lose">You Lost!</p>
-	}
-	<p class="clock @(Lost ? "clock-stopped-lose" : (Won ? "clock-stopped-win" : ""))">@GameTime.ToString(@"dd\.hh\:mm\:ss\:fff")</p>
+
 	<table class="sweeper">
+		@if (Won || Lost)
+		{
+			<tr class="stats">
+				<td class="stats" colspan="@CurrentBoard.MaxWidth">
+					@if (Won)
+					{
+						<p class="result result-win">You Won!</p>
+					}
+					else if (Lost)
+					{
+						<p class="result result-lose">You Lost!</p>
+					}
+				</td>
+			</tr>
+		}
+		<tr class="stats">
+			<td class="stats" colspan="@CurrentBoard.MaxWidth">
+				<img class="stats" src="\Images\mine.png" />
+				<div class="stats-text">@CurrentBoard.RemainingMines</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="stats" colspan="@CurrentBoard.MaxWidth">
+				<p class="clock @(Lost ? "clock-stopped-lose" : (Won ? "clock-stopped-win" : ""))">@GameTime.ToString(@"dd\.hh\:mm\:ss\:fff")</p>
+			</td>
+		</tr>
 		@for (int r = 0; r < CurrentBoard.MaxHeight; r++)
 		{
 			var row = r;

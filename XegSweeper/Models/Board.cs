@@ -8,12 +8,16 @@ namespace XegSweeper.Models
 	public class Board
 	{
 
-		public Cell[,] Cells { get; set; }
+		public Cell[,] Cells { get; private set; }
 		public int MaxHeight { get { return Cells.GetLength(0); } }
 		public int MaxWidth { get { return Cells.GetLength(1); } }
+		public int MineCount { get; private set; }
+		public int FlagCount { get; private set; }
+		public int RemainingMines { get { return MineCount - FlagCount; } }
 		public GameState CurrentState { get; set; } = GameState.InProgress;
 		public Board(Settings settings)
 		{
+			MineCount = settings.MineCount;
 			Cells = new Cell[settings.Height, settings.Width];
 			var generator = new Random();
 			List<Tuple<int, int>> bombLocations = new List<Tuple<int, int>>();
@@ -69,6 +73,7 @@ namespace XegSweeper.Models
 			if (!cell.Flagged)
 			{
 				cell.Flagged = true;
+				FlagCount++;
 				CheckWin();
 			}
 			else
