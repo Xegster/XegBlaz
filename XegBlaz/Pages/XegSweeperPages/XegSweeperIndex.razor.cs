@@ -83,6 +83,14 @@ namespace XegBlaz.Pages.XegSweeperPages
 			}
 		}
 
+		protected void SettingsChanged()
+		{
+			if (CurrentSettings.MineCount > CurrentSettings.MaxMineCount)
+				CurrentSettings.MineCount = Math.Max(0, CurrentSettings.MaxMineCount);
+			if (CurrentSettings.FreeHits > CurrentSettings.MaxFreeHits)
+				CurrentSettings.FreeHits = Math.Max(0, CurrentSettings.MaxFreeHits);
+		}
+
 		#region Timer
 		public TimeSpan GameTime { get; set; }
 		public long StartTime { get; set; }

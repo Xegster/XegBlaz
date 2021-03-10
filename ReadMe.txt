@@ -11,6 +11,8 @@ firebase login
 firebase init
 
 > follow prompts. Mostly pretty obvious. For "index.html already exists. Overwrite?" choose no
+> For the target directory choose:
+publish\wwwroot
 
 > run command:
 firebase deploy

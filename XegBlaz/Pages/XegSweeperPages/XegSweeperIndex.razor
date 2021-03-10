@@ -3,49 +3,69 @@
 <h3>XegSweeper</h3>
 @if (!GameStarted)
 {
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-4">Difficulty?</div>
-		</div>
-		<div class="row">
-			<div class="col-lg-3"><button class="btn btn-success" @onclick="() => SetSettings(DifficultySettings.Easy)">Easy</button></div>
-			<div class="col-lg-3"><button class="btn btn-warning" @onclick="() => SetSettings(DifficultySettings.Medium)">Medium</button></div>
-			<div class="col-lg-3"><button class="btn btn-danger" @onclick="() => SetSettings(DifficultySettings.Hard)">Hard</button></div>
-			<div class="col-lg-3"><button class="btn btn-primary" @onclick="() => SetCustom()">Custom</button></div>
-		</div>
-		@if (CurrentSettings != null)
-		{
-			<div class="row">
-				<div class="col-lg-3">
-					Width:
-				</div>
-				<div class="col-lg-3">
-					<input @bind="@CurrentSettings.Width" />
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-3">
-					Height:
-				</div>
-				<div class="col-lg-3">
-					<input @bind="@CurrentSettings.Height" />
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-3">
-					Mines:
-				</div>
-				<div class="col-lg-3">
-					<input @bind="@CurrentSettings.MineCount" />
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-12">
-					<button class="btn btn-outline-info" @onclick="() => StartGame()">Start</button>
-				</div>
-			</div>
-		}
+<div class="container">
+	<div class="row">
+		<div class="col-lg-4">Difficulty?</div>
 	</div>
+	<div class="row">
+		<div class="col-lg-3"><button class="btn btn-success" @onclick="() => SetSettings(DifficultySettings.Easy)">Easy</button></div>
+		<div class="col-lg-3"><button class="btn btn-warning" @onclick="() => SetSettings(DifficultySettings.Medium)">Medium</button></div>
+		<div class="col-lg-3"><button class="btn btn-danger" @onclick="() => SetSettings(DifficultySettings.Hard)">Hard</button></div>
+		<div class="col-lg-3"><button class="btn btn-primary" @onclick="() => SetCustom()">Custom</button></div>
+	</div>
+	@if (CurrentSettings != null)
+		{
+	<div class="row align-content-center align-items-center">
+		<div class="col-lg-2 align-content-center align-items-center">
+			Width:
+		</div>
+		<div class="col-lg-3 align-content-center align-items-center">
+			<input type="range" min="1" max="100" @onchange="() => SettingsChanged()" @bind="@CurrentSettings.Width" class="mdc-slider" @bind:event="oninput" />
+		</div>
+		<div class="col-lg-3 align-content-center align-items-center">
+			@CurrentSettings.Width
+		</div>
+	</div>
+	<div class="row align-content-center align-items-center">
+		<div class="col-lg-2 align-content-center align-items-center">
+			Height:
+		</div>
+		<div class="col-lg-3 align-content-center align-items-center">
+			<input type="range" min="1" max="100"  @onchange="() => SettingsChanged()" @bind="@CurrentSettings.Height" class="mdc-slider" @bind:event="oninput" />
+		</div>
+		<div class="col-lg-3 align-content-center align-items-center">
+			@CurrentSettings.Height
+		</div>
+	</div>
+	<div class="row align-content-center align-items-center">
+		<div class="col-lg-2 align-content-center align-items-center">
+			Mines:
+		</div>
+		<div class="col-lg-3 align-content-center align-items-center">
+			<input type="range" min="1" max="@CurrentSettings.MaxMineCount"  @onchange="() => SettingsChanged()" @bind="@CurrentSettings.MineCount" class="mdc-slider" @bind:event="oninput" />
+		</div>
+		<div class="col-lg-3 align-content-center align-items-center">
+			@CurrentSettings.MineCount
+		</div>
+	</div>
+	<div class="row align-content-center align-items-center">
+		<div class="col-lg-2 align-content-center align-items-center">
+			Minimum Uncovered Spaces:
+		</div>
+		<div class="col-lg-3 align-content-center align-items-center">
+			<input type="range" min="0" max="@CurrentSettings.MineCount"  @onchange="() => SettingsChanged()" @bind="@CurrentSettings.FreeHits" class="mdc-slider" @bind:event="oninput" />
+		</div>
+		<div class="col-lg-3 align-content-center align-items-center">
+			@CurrentSettings.FreeHits
+		</div>
+	</div>
+	<div class="row align-content-center align-items-center">
+		<div class="col-lg-2 align-content-center align-items-center">
+			<button class="btn btn-outline-info" @onclick="() => StartGame()">Start</button>
+		</div>
+	</div>
+		}
+</div>
 }
 else
 {

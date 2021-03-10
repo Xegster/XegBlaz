@@ -21,10 +21,13 @@ td.sweeper {
 	vertical-align: middle;
 }
 
+
 td.covered {
 	background-color: lightgray;
 }
-
+	td.covered:hover {
+		background-color: darkgray;
+	}
 .clock {
 	font-size: 40px;
 }
@@ -71,8 +74,8 @@ td.stats {
 	vertical-align: middle;
 }
 img.stats {
-	height: 150px;
-	width: 150px;
+	height: 100px;
+	width: 100px;
 }
 div.stats-text {
 	color: red;

@@ -15,7 +15,8 @@ namespace XegSweeper.Utilities
 					{
 						Height = 10,
 						Width = 10,
-						MineCount = 10
+						MineCount = 10,
+						FreeHits = 3
 					};
 				}
 				return _easy;
@@ -32,7 +33,8 @@ namespace XegSweeper.Utilities
 					{
 						Height = 14,
 						Width = 18,
-						MineCount = 40
+						MineCount = 40,
+						FreeHits = 1
 					};
 				}
 				return _medium;
@@ -49,7 +51,8 @@ namespace XegSweeper.Utilities
 					{
 						Height = 20,
 						Width = 24,
-						MineCount = 99
+						MineCount = 99,
+						FreeHits = 0
 					};
 				}
 				return _hard;

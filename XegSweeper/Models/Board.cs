@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using XegSweeper.Utilities;
 
 namespace XegSweeper.Models
@@ -11,27 +10,29 @@ namespace XegSweeper.Models
 		public Cell[,] Cells { get; private set; }
 		public int MaxHeight { get { return Cells.GetLength(0); } }
 		public int MaxWidth { get { return Cells.GetLength(1); } }
+		public int TotalCells { get { return MaxHeight * MaxWidth; } }
+		public int UncoveredCells { get; set; }
 		public int MineCount { get; private set; }
 		public int FlagCount { get; private set; }
 		public int RemainingMines { get { return MineCount - FlagCount; } }
 		public GameState CurrentState { get; set; } = GameState.InProgress;
+		public int FreeHits { get; set; }
+
+		//private List<Tuple<int, int>> BombLocations { get; set; }
+
+		private Random Generator { get; set; } = new Random();
 		public Board(Settings settings)
 		{
+			//BombLocations = new List<Tuple<int, int>>(); 
 			MineCount = settings.MineCount;
+			FreeHits = settings.FreeHits;
 			Cells = new Cell[settings.Height, settings.Width];
-			var generator = new Random();
 			List<Tuple<int, int>> bombLocations = new List<Tuple<int, int>>();
 			for (int i = 0; i < settings.MineCount; i++)
 			{
-				var randR = generator.Next(0, settings.Height);
-				var randC = generator.Next(0, settings.Width);
-				while (bombLocations.Any(bl => bl.Item1 == randR && bl.Item2 == randC))
-				{
-					randR = generator.Next(0, settings.Height);
-					randC = generator.Next(0, settings.Width);
-				}
-				Cells[randR, randC] = new Cell() { Bomb = true };
-				bombLocations.Add(new Tuple<int, int>(randR, randC));
+				Tuple<int, int> cellCoords = FindUnusedBombCoords(Cells);
+				Cells[cellCoords.Item1, cellCoords.Item2] = new Cell() { Bomb = true };
+				bombLocations.Add(cellCoords);
 			}
 			foreach (var bomb in bombLocations)
 			{
@@ -47,7 +48,19 @@ namespace XegSweeper.Models
 			}
 		}
 
-
+		private Tuple<int, int> FindUnusedBombCoords(Cell[,] cells)
+		{
+			var randR = Generator.Next(0, MaxHeight);
+			var randC = Generator.Next(0, MaxWidth);
+			var cell = cells[randR, randC];
+			while (cell != null && (cell.Bomb || cell.Uncovered))
+			{
+				randR = Generator.Next(0, MaxHeight);
+				randC = Generator.Next(0, MaxWidth);
+				cell = cells[randR, randC];
+			}
+			return new Tuple<int, int>(randR, randC);
+		}
 
 		private void MarkNeighbors(Cell[,] cells, int bombRow, int bombColumn)
 		{
@@ -79,20 +92,59 @@ namespace XegSweeper.Models
 			else
 			{
 				cell.Flagged = false;
+				FlagCount--;
 			}
 		}
 
 		public void Uncover(int row, int column)
 		{
+
 			var cell = Cells[row, column];
 			if (cell.Flagged) return;
 
+
 			cell.Uncovered = true;
+			UncoveredCells++;
+
+			if (UncoveredCells <= FreeHits && cell.Bomb)
+				MoveBomb(row, column);
+
 			if (cell.Bomb)
 				Lose();
 			else if (cell.IsEmpty)
 				UncoverNeighbors(row, column);
 			CheckWin();
+		}
+
+		private void MoveBomb(int row, int column)
+		{
+			var bomb = Cells[row, column];
+			bomb.Bomb = false;
+			bomb.Value = CalculateClue(row, column);
+			var newCoords = FindUnusedBombCoords(Cells);
+			var newBomb = Cells[newCoords.Item1, newCoords.Item2];
+			newBomb.Value = 0;
+			newBomb.Bomb = true;
+			MarkNeighbors(Cells, newCoords.Item1, newCoords.Item2);
+
+		}
+
+		private int CalculateClue(int row, int column)
+		{
+			int ret = 0;
+			for (int r = row - 1; r < row + 2; r++)
+			{
+				if (r < 0 || r >= MaxHeight)
+					continue;
+				for (int c = column - 1; c < column + 2; c++)
+				{
+					if (c < 0 || c >= MaxWidth)
+						continue;
+					if (Cells[r, c].Bomb)
+						ret++;
+				}
+			}
+			return ret;
 		}
 
 		private void CheckWin()
