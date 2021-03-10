@@ -51,7 +51,7 @@ namespace XegBlaz.Pages.XegSweeperPages
 			Console.WriteLine("Row: " + row + " Col: " + column);
 			if (!TimeStarted)
 				RunGameTimer();
-			CurrentBoard.Uncover(row, column);
+			CurrentBoard.Uncover(row, column);//
 			CheckGameState();
 		}
 		protected void SetFlag(MouseEventArgs args, int row, int column)
