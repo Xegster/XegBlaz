@@ -62,7 +62,7 @@ namespace XegSweeper.Models
 			return new Tuple<int, int>(randR, randC);
 		}
 
-		private void MarkNeighbors(Cell[,] cells, int bombRow, int bombColumn)
+		private void MarkNeighbors(Cell[,] cells, int bombRow, int bombColumn, bool remove = false)
 		{
 			for (int r = bombRow - 1; r < bombRow + 2; r++)
 			{
@@ -73,9 +73,14 @@ namespace XegSweeper.Models
 					if (c < 0 || c >= MaxWidth)
 						continue;
 					if (cells[r, c] == null)
-						cells[r, c] = new Cell() { Value = 1 };
+						cells[r, c] = new Cell() { Value = remove ? 0 : 1 };
 					else if (!cells[r, c].Bomb)
-						cells[r, c].Value++;
+					{
+						if (remove)
+							cells[r, c].Value--;
+						else
+							cells[r, c].Value++;
+					}
 				}
 			}
 		}
@@ -118,13 +123,20 @@ namespace XegSweeper.Models
 
 		private void MoveBomb(int row, int column)
 		{
+			//First remove the bomb
 			var bomb = Cells[row, column];
 			bomb.Bomb = false;
+			//This decrements the clues in the neighboring cells
+			MarkNeighbors(Cells, row, column, true);
+			//Now set the clue for this bomb
 			bomb.Value = CalculateClue(row, column);
+			//find a new bomb location
 			var newCoords = FindUnusedBombCoords(Cells);
 			var newBomb = Cells[newCoords.Item1, newCoords.Item2];
+			//turn that cell into a bomb
 			newBomb.Value = 0;
 			newBomb.Bomb = true;
+			//Increment the neighbors of the new bomb
 			MarkNeighbors(Cells, newCoords.Item1, newCoords.Item2);
 
 		}
