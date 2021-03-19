@@ -3,69 +3,135 @@
 <h3>XegSweeper</h3>
 @if (!GameStarted)
 {
-<div class="container">
-	<div class="row">
-		<div class="col-lg-4">Difficulty?</div>
-	</div>
-	<div class="row">
-		<div class="col-lg-3"><button class="btn btn-success" @onclick="() => SetSettings(DifficultySettings.Easy)">Easy</button></div>
-		<div class="col-lg-3"><button class="btn btn-warning" @onclick="() => SetSettings(DifficultySettings.Medium)">Medium</button></div>
-		<div class="col-lg-3"><button class="btn btn-danger" @onclick="() => SetSettings(DifficultySettings.Hard)">Hard</button></div>
-		<div class="col-lg-3"><button class="btn btn-primary" @onclick="() => SetCustom()">Custom</button></div>
-	</div>
-	@if (CurrentSettings != null)
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4">Difficulty?</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-3"><button class="btn btn-success" @onclick="() => SetSettings(DifficultySettings.Easy)">Easy</button></div>
+			<div class="col-lg-3"><button class="btn btn-warning" @onclick="() => SetSettings(DifficultySettings.Medium)">Medium</button></div>
+			<div class="col-lg-3"><button class="btn btn-danger" @onclick="() => SetSettings(DifficultySettings.Hard)">Hard</button></div>
+			<div class="col-lg-3"><button class="btn btn-primary" @onclick="() => SetCustom()">Custom</button></div>
+		</div>
+		@if (CurrentSettings != null)
 		{
-	<div class="row align-content-center align-items-center">
-		<div class="col-lg-2 align-content-center align-items-center">
-			Width:
-		</div>
-		<div class="col-lg-3 align-content-center align-items-center">
-			<input type="range" min="1" max="100" @onchange="() => SettingsChanged()" @bind="@CurrentSettings.Width" class="mdc-slider" @bind:event="oninput" />
-		</div>
-		<div class="col-lg-3 align-content-center align-items-center">
-			@CurrentSettings.Width
-		</div>
-	</div>
-	<div class="row align-content-center align-items-center">
-		<div class="col-lg-2 align-content-center align-items-center">
-			Height:
-		</div>
-		<div class="col-lg-3 align-content-center align-items-center">
-			<input type="range" min="1" max="100"  @onchange="() => SettingsChanged()" @bind="@CurrentSettings.Height" class="mdc-slider" @bind:event="oninput" />
-		</div>
-		<div class="col-lg-3 align-content-center align-items-center">
-			@CurrentSettings.Height
-		</div>
-	</div>
-	<div class="row align-content-center align-items-center">
-		<div class="col-lg-2 align-content-center align-items-center">
-			Mines:
-		</div>
-		<div class="col-lg-3 align-content-center align-items-center">
-			<input type="range" min="1" max="@CurrentSettings.MaxMineCount"  @onchange="() => SettingsChanged()" @bind="@CurrentSettings.MineCount" class="mdc-slider" @bind:event="oninput" />
-		</div>
-		<div class="col-lg-3 align-content-center align-items-center">
-			@CurrentSettings.MineCount
-		</div>
-	</div>
-	<div class="row align-content-center align-items-center">
-		<div class="col-lg-2 align-content-center align-items-center">
-			Minimum Uncovered Spaces:
-		</div>
-		<div class="col-lg-3 align-content-center align-items-center">
-			<input type="range" min="0" max="@CurrentSettings.MineCount"  @onchange="() => SettingsChanged()" @bind="@CurrentSettings.FreeHits" class="mdc-slider" @bind:event="oninput" />
-		</div>
-		<div class="col-lg-3 align-content-center align-items-center">
-			@CurrentSettings.FreeHits
-		</div>
-	</div>
-	<div class="row align-content-center align-items-center">
-		<div class="col-lg-2 align-content-center align-items-center">
-			<button class="btn btn-outline-info" @onclick="() => StartGame()">Start</button>
-		</div>
-	</div>
+			<div class="row align-content-center align-items-center">
+				<div class="col-lg-2 align-content-center align-items-center">
+					Width:
+				</div>
+				<div class="col-lg-3 align-content-center align-items-center">
+					<input type="range" min="@CurrentSettings.MinWidth" max="@CurrentSettings.MaxWidth" @onchange="() => SettingsChanged()" @bind="@CurrentSettings.Width" class="mdc-slider" @bind:event="oninput" />
+				</div>
+				<div class="col-lg-1 align-content-center align-items-center">
+					@CurrentSettings.Width
+				</div>
+				<div class="col-lg-1 align-content-center align-items-center">
+					<div class="row">
+						<div class="col-lg-5">
+							<button class="btn btn-outline-info font-weight-bolder" @onchange="() => SettingsChanged()"
+									@onclick="() => { if(CurrentSettings.Width < CurrentSettings.MaxWidth) CurrentSettings.Width += 1; }">
+								+
+							</button>
+						</div>
+						<div class="col-lg-5">
+							<button class="btn btn-outline-info font-weight-bolder" @onchange="() => SettingsChanged()"
+									@onclick="() => { if(CurrentSettings.Width > CurrentSettings.MinWidth) CurrentSettings.Width -= 1; }">
+								-
+							</button>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+			<div class="row align-content-center align-items-center">
+				<div class="col-lg-2 align-content-center align-items-center">
+					Height:
+				</div>
+				<div class="col-lg-3 align-content-center align-items-center">
+					<input type="range" min="@CurrentSettings.MinHeight" max="@CurrentSettings.MaxHeight" @onchange="() => SettingsChanged()" @bind="@CurrentSettings.Height" class="mdc-slider" @bind:event="oninput" />
+				</div>
+				<div class="col-lg-1 align-content-center align-items-center">
+					@CurrentSettings.Height
+				</div>
+				<div class="col-lg-1 align-content-center align-items-center">
+					<div class="row">
+						<div class="col-lg-5">
+							<button class="btn btn-outline-info font-weight-bolder" @onchange="() => SettingsChanged()"
+									@onclick="() => { if(CurrentSettings.Height < CurrentSettings.MaxHeight) CurrentSettings.Height += 1; }">
+								+
+							</button>
+						</div>
+						<div class="col-lg-5">
+							<button class="btn btn-outline-info font-weight-bolder" @onchange="() => SettingsChanged()"
+									@onclick="() => { if(CurrentSettings.Height > CurrentSettings.MinHeight) CurrentSettings.Height -= 1; }">
+								-
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row align-content-center align-items-center">
+				<div class="col-lg-2 align-content-center align-items-center">
+					Mines:
+				</div>
+				<div class="col-lg-3 align-content-center align-items-center">
+					<input type="range" min="@CurrentSettings.MinMineCount" max="@CurrentSettings.MaxMineCount" @onchange="() => SettingsChanged()" @bind="@CurrentSettings.MineCount" class="mdc-slider" @bind:event="oninput" />
+				</div>
+				<div class="col-lg-1 align-content-center align-items-center">
+					@CurrentSettings.MineCount
+				</div>
+				<div class="col-lg-1 align-content-center align-items-center">
+					<div class="row">
+						<div class="col-lg-5">
+							<button class="btn btn-outline-info font-weight-bolder" @onchange="() => SettingsChanged()"
+									@onclick="() => { if(CurrentSettings.MineCount < CurrentSettings.MaxMineCount) CurrentSettings.MineCount += 1; }">
+								+
+							</button>
+						</div>
+						<div class="col-lg-5">
+							<button class="btn btn-outline-info font-weight-bolder" @onchange="() => SettingsChanged()"
+									@onclick="() => { if(CurrentSettings.MineCount > CurrentSettings.MinMineCount) CurrentSettings.MineCount -= 1; }">
+								-
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row align-content-center align-items-center">
+				<div class="col-lg-2 align-content-center align-items-center">
+					Minimum Uncovered Spaces:
+				</div>
+				<div class="col-lg-3 align-content-center align-items-center">
+					<input type="range" min="@CurrentSettings.MinFreeHits" max="@CurrentSettings.MaxFreeHits" @onchange="() => SettingsChanged()" @bind="@CurrentSettings.FreeHits" class="mdc-slider" @bind:event="oninput" />
+				</div>
+				<div class="col-lg-1 align-content-center align-items-center">
+					@CurrentSettings.FreeHits
+				</div>
+				<div class="col-lg-1 align-content-center align-items-center">
+					<div class="row">
+						<div class="col-lg-5">
+							<button class="btn btn-outline-info font-weight-bolder" @onchange="() => SettingsChanged()"
+									@onclick="() => { if(CurrentSettings.FreeHits < CurrentSettings.MaxFreeHits) CurrentSettings.FreeHits += 1; }">
+								+
+							</button>
+						</div>
+						<div class="col-lg-5">
+							<button class="btn btn-outline-info font-weight-bolder" @onchange="() => SettingsChanged()"
+									@onclick="() => { if(CurrentSettings.FreeHits > CurrentSettings.MinFreeHits) CurrentSettings.FreeHits -= 1; }">
+								-
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row align-content-center align-items-center">
+				<div class="col-lg-2 align-content-center align-items-center">
+					<button class="btn btn-outline-info" @onclick="() => StartGame()">Start</button>
+				</div>
+			</div>
 		}
-</div>
+	</div>
 }
 else
 {
@@ -107,7 +173,7 @@ else
 					<td class="sweeper @(CurrentBoard.Cells[row,col].Covered ? "covered" : "")"
 						@onclick="() => Uncover(row,col)"
 						@oncontextmenu="(args) => SetFlag(args, row, col)" @oncontextmenu:preventDefault="true">
-						@if (CurrentBoard.Cells[row, col].Uncovered && CurrentBoard.Cells[row, col].Bomb)
+						@if ((CurrentBoard.Cells[row, col].Uncovered || Lost) && CurrentBoard.Cells[row, col].Bomb)
 						{
 							<img class="bomb" src="\Images\mine.png" />
 						}

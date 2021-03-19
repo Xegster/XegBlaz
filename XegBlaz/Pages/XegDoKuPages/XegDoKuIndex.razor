@@ -1,0 +1,58 @@
+﻿@page "/XegDoKu"
+@inject HttpClient Http
+<h3>XegDoKuIndex</h3>
+@foreach (var board in Boards)
+{
+
+	<table class="xegdoku">
+		@for (int r = 0; r < board.Height; r++)
+		{
+			var row = r;
+			<tr class="xegdoku">
+				@for (int c = 0; c < board.Width; c++)
+				{
+					var col = c;
+					<td class="xegdoku cell @CellClass(row, col)">
+						@if (board.Cells[row, col].Value != 0)
+						{
+							<p class="cell">@board.Cells[row, col].Value</p>
+						}
+
+					</td>
+					@*@if ((c % 3) == 2 && c != 8)
+						{
+							<td class="xegdoku">
+							</td>
+						}*@
+
+				}
+			</tr>
+			@*@if ((r % 3) == 2 && r != 8)
+				{
+					<tr class="xegdoku">
+						<td colspan="11" class="xegdoku"></td>
+					</tr>
+				}*@
+		}
+	</table>
+}
+@code {
+
+	//private int[,] bookings;
+
+	//protected override async Task OnInitializedAsync()
+	//{
+	//	try
+	//	{
+	//		bookings = await Http.GetFromJsonAsync<int[,]>("Availability?van=california");
+	//	}
+
+	//	catch (Exception exception)
+	//	{
+
+	//	}
+
+
+	//}
+
+}

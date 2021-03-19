@@ -10,10 +10,12 @@
     <PackageReference Include="MatBlazor" Version="2.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.2" PrivateAssets="all" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\XegDoKu\XegDoKu.csproj" />
     <ProjectReference Include="..\XegStar\XegStar.csproj" />
     <ProjectReference Include="..\XegSweeper\XegSweeper.csproj" />
   </ItemGroup>

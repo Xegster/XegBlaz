@@ -1,0 +1,48 @@
+﻿body {
+}
+
+td.xegdoku {
+	width: 50px;
+	min-width: 50px;
+	max-width: 50px;
+	text-align: center;
+	vertical-align: middle;
+}
+table.xegdoku {
+	width: auto;
+	height: auto;
+}
+
+tr.xegdoku {
+	height: 50px;
+}
+
+td.cell {
+	border-style: solid;
+	border-width: 1px;
+	border-color: blue;
+}
+td.thick-right {
+	border-right-width: 5px;
+}
+td.thick-left {
+	border-left-width: 5px;
+}
+td.thick-bottom {
+	border-bottom-width: 5px;
+}
+td.thick-top {
+	border-top-width: 5px;
+}
+td.quadrant-odd {
+	background-color: gray;
+}
+td.quadrant-even {
+	background-color: lightgray;
+}
+
+p.cell {
+	margin: 0px;
+	font-size: 24px;
+	color: black;
+}

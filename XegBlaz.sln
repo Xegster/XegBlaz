@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XegBlaz", "XegBlaz\XegBlaz.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XegStar", "XegStar\XegStar.csproj", "{93302F01-2C85-4362-A262-50AD6437D5A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XegSweeper", "XegSweeper\XegSweeper.csproj", "{F5436F4B-151E-403B-834E-9307847A9571}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XegSweeper", "XegSweeper\XegSweeper.csproj", "{F5436F4B-151E-403B-834E-9307847A9571}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XegBlaz.Test", "XegBlaz.Test\XegBlaz.Test.csproj", "{3CBB3CA6-FA17-49F4-94BE-E636C64DBBBC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XegDoKu", "XegDoKu\XegDoKu.csproj", "{53A08549-F772-4353-8EDB-E5E99D574BB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{3CBB3CA6-FA17-49F4-94BE-E636C64DBBBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CBB3CA6-FA17-49F4-94BE-E636C64DBBBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CBB3CA6-FA17-49F4-94BE-E636C64DBBBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53A08549-F772-4353-8EDB-E5E99D574BB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53A08549-F772-4353-8EDB-E5E99D574BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53A08549-F772-4353-8EDB-E5E99D574BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53A08549-F772-4353-8EDB-E5E99D574BB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
