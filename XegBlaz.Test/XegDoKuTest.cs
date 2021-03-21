@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using XegBlaz.Test.Utilities;
 using XegDoKu;
 using XegDoKu.Models;
 using XegDoKu.Utilities;
@@ -16,30 +17,73 @@ namespace XegBlaz.Test
 	{
 		private int[,] TestSudoku = new int[,]
 			{
-				{ 9,0,0,0,0,6,7,0,2 },
-				{ 0,0,7,0,0,0,0,6,0 },
-				{ 0,1,6,2,0,0,0,0,0 },
-				{ 0,0,0,0,2,9,3,5,0 },
-				{ 4,0,0,7,0,8,0,0,6 },
-				{ 0,2,5,1,4,0,0,0,0 },
-				{ 0,0,0,0,0,4,8,2,0 },
-				{ 0,6,0,0,0,0,5,0,0 },
-				{ 5,0,9,8,0,0,0,0,1 },
+{ 8,0,6,0,5,0,0,2,9 },
+{ 9,0,7,2,0,6,8,1,5 },
+{ 1,5,2,9,8,0,0,6,3 },
+{ 3,8,0,5,6,2,9,7,0 },
+{ 5,2,0,8,7,9,6,3,0 },
+{ 6,7,9,0,0,0,2,5,8 },
+{ 4,9,3,7,2,5,1,8,6 },
+{ 2,1,8,6,9,3,5,4,7 },
+{ 7,6,5,0,0,8,3,9,2 },
 			};
 		private Board TestBoard;
+		private string SolutionJsonName = "TestSolution.json";
+		private string ProblemJsonName = "TestProblem.json";
 		[TestInitialize]
 		public void Setup()
 		{
-			TestBoard = new Board(Settings.BasicSettings, TestSudoku);
-			var jsonData = TestBoard.Cells.ToList().Select(cell => new CellDTO
-			{
-				Value = cell.Value,
-				Row = cell.Coordinate.Row,
-				Column = cell.Coordinate.Column
-			}).ToList();
-			var json = JsonConvert.SerializeObject(jsonData);
-			AddToFile(@"C:\Xegster\Development\XegBlaz\XegBlaz\wwwroot\sample-data\TestProblem.json", json, false);
+			TestBoard = new Board(Settings.EasyStandard, TestSudoku);
+		}
 
+		[TestMethod]
+		public void TestFullGeneration()
+		{
+			List<Solution> solutions = new List<Solution>();
+			var st = Stopwatch.StartNew();
+			TestNotify tn = new TestNotify();
+			for (int i = 0; i < 100; i++)
+			{
+				var rando = XegDoKuFactory.BuildBase(Settings.EasyStandard);
+				var randoBoard = new Board(Settings.ImpossibleStandard, rando);
+				//SaveToJSON(randoBoard, ProblemJsonName);
+				var solver = new XegDoKuSolver(randoBoard, tn);
+				var solution = solver.Solve();
+				if (!solutions.Any(s => s.SolvedBoard.CompareCellValues(randoBoard).Count == 0))
+					solutions.Add(solution);
+				if (solution.State != SolutionState.Solved)
+				{
+					//SaveToJSON(solution.SolvedBoard, SolutionJsonName);
+					//break;
+				}
+				//Assert.IsTrue(solution.State == SolutionState.Solved);
+			}
+			st.Stop();
+			TimeSpan time = TimeSpan.FromTicks(st.ElapsedTicks);
+			var solvedSols = solutions.Where(s => s.State == SolutionState.Solved).ToList();
+			var solvedCount = solvedSols.Count;
+			var impossSols = solutions.Where(s => s.State != SolutionState.Solved).ToList();
+			var impossCount = impossSols.Count;
+			var boardCount = tn.BoardAddedCount;
+			var boardMod = tn.BoardModifiedCount;
+			
+		}
+
+		[TestMethod]
+		public void TestRandomness()
+		{
+			List<int[,]> randos = new List<int[,]>();
+			var st = Stopwatch.StartNew();
+			for (int i = 0; i < 100; i++)
+			{
+				var rando = XegDoKuFactory.BuildBase(Settings.EasyStandard);
+				if (!randos.Any(r => r.Compare(rando).Count == 0))
+					randos.Add(rando);
+				
+			}
+			st.Stop();
+			TimeSpan time = TimeSpan.FromTicks(st.ElapsedTicks);
+			int count = randos.Count;
 		}
 
 		[TestMethod]
@@ -72,21 +116,8 @@ namespace XegBlaz.Test
 		{
 			var rawJson = File.ReadAllText(@"C:\Xegster\Development\XegBlaz\XegBlaz\wwwroot\sample-data\TestSolution.json");
 			List<CellDTO> jsonData = JsonConvert.DeserializeObject<List<CellDTO>>(rawJson);
-			var b = new Board(Settings.BasicSettings, jsonData);
+			var b = new Board(Settings.EasyStandard, jsonData);
 
-		}
-		public static void AddToFile(string file, string content, bool append = true)
-		{
-			try
-			{
-				if (!Directory.Exists(Path.GetDirectoryName(file)))
-					Directory.CreateDirectory(Path.GetDirectoryName(file));
-				using (StreamWriter sr = new StreamWriter(file, append))
-				{
-					sr.WriteLine(content);
-				}
-			}
-			catch { }
 		}
 
 
@@ -137,6 +168,35 @@ namespace XegBlaz.Test
 
 			}
 		}
+
+		#region Helpers
+		public static void SaveToJSON(Board board, string jsonName)
+		{
+			var jsonData = board.Cells.ToList().Select(cell => new CellDTO
+			{
+				Value = cell.Value,
+				Row = cell.Coordinate.Row,
+				Column = cell.Coordinate.Column
+			}).ToList();
+			var json = JsonConvert.SerializeObject(jsonData);
+			AddToFile(@"C:\Xegster\Development\XegBlaz\XegBlaz\wwwroot\sample-data\" + jsonName, json, false);
+
+		}
+		public static void AddToFile(string file, string content, bool append = true)
+		{
+			try
+			{
+				if (!Directory.Exists(Path.GetDirectoryName(file)))
+					Directory.CreateDirectory(Path.GetDirectoryName(file));
+				using (StreamWriter sr = new StreamWriter(file, append))
+				{
+					sr.WriteLine(content);
+				}
+			}
+			catch { }
+		}
+
+		#endregion
 
 	}
 }

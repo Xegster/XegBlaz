@@ -4,6 +4,6 @@
 	{
 		public Board Board { get; set; }
 
-
+		public Board Solution { get; set; }
 	}
 }

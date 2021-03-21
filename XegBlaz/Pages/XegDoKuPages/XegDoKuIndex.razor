@@ -1,58 +1,48 @@
 ﻿@page "/XegDoKu"
 @inject HttpClient Http
 <h3>XegDoKuIndex</h3>
-@foreach (var board in Boards)
-{
+<div class="container-fluid">
 
-	<table class="xegdoku">
-		@for (int r = 0; r < board.Height; r++)
-		{
-			var row = r;
-			<tr class="xegdoku">
-				@for (int c = 0; c < board.Width; c++)
-				{
-					var col = c;
-					<td class="xegdoku cell @CellClass(row, col)">
-						@if (board.Cells[row, col].Value != 0)
+	@for (int boardRow = 0; boardRow < (int)Math.Ceiling((double)Boards.Count / (double)BoardWidth); boardRow++)
+	{
+		<div class="row">
+			@foreach (var board in Boards.Skip(boardRow * BoardWidth).Take(BoardWidth))
+			{
+				<div class="@("col-lg-" + ((int)(12 / BoardWidth)).ToString())">
+					<table class="xegdoku">
+						@for (int r = 0; r < board.Height; r++)
 						{
-							<p class="cell">@board.Cells[row, col].Value</p>
+							var row = r;
+							<tr class="xegdoku">
+								@for (int c = 0; c < board.Width; c++)
+								{
+									var col = c;
+									var val = @board.Cells[row, col].Value;
+									<td class="xegdoku cell @CellClass(row, col)">
+										@if (val != 0)
+										{
+											<p class="cell @("cell-" + val.ToString())">@val</p>
+										}
+
+									</td>
+									@*@if ((c % 3) == 2 && c != 8)
+										{
+											<td class="xegdoku">
+											</td>
+										}*@
+
+								}
+							</tr>
+							@*@if ((r % 3) == 2 && r != 8)
+								{
+									<tr class="xegdoku">
+										<td colspan="11" class="xegdoku"></td>
+									</tr>
+								}*@
 						}
-
-					</td>
-					@*@if ((c % 3) == 2 && c != 8)
-						{
-							<td class="xegdoku">
-							</td>
-						}*@
-
-				}
-			</tr>
-			@*@if ((r % 3) == 2 && r != 8)
-				{
-					<tr class="xegdoku">
-						<td colspan="11" class="xegdoku"></td>
-					</tr>
-				}*@
-		}
-	</table>
-}
-@code {
-
-	//private int[,] bookings;
-
-	//protected override async Task OnInitializedAsync()
-	//{
-	//	try
-	//	{
-	//		bookings = await Http.GetFromJsonAsync<int[,]>("Availability?van=california");
-	//	}
-
-	//	catch (Exception exception)
-	//	{
-
-	//	}
-
-
-	//}
-
-}
+					</table>
+				</div>
+			}
+		</div>
+	}
+</div>

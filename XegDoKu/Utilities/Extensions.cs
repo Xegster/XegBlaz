@@ -7,6 +7,7 @@ namespace XegDoKu.Utilities
 {
 	public static class Extensions
 	{
+		private static Random Generator { get; set; } = new Random();
 		public static IEnumerable<T> GetValues<T>()
 		{
 			return Enum.GetValues(typeof(T)).Cast<T>();
@@ -32,6 +33,10 @@ namespace XegDoKu.Utilities
 		{
 			return cells.AsEnumerable().Where(cell => cell.Value == 0 && cell.PossibleValues.Count == 0).ToList();
 		}
+		public static IEnumerable<Cell> EmptyCells(this IEnumerable<Cell> cells)
+		{
+			return cells.AsEnumerable().Where(cell => cell.Value == 0);
+		}
 		public static int[,] ToValueArray(this Cell[,] cells)
 		{
 
@@ -47,7 +52,7 @@ namespace XegDoKu.Utilities
 			}
 			return ret;
 		}
-		public static IEnumerable<Cell[]> Rows(this Cell[,] cells)
+		public static IEnumerable<T[]> Rows<T>(this T[,] cells)
 		{
 			var height = cells.GetLength(0);
 			for (int i = 0; i < height; i++)
@@ -58,13 +63,31 @@ namespace XegDoKu.Utilities
 			foreach (var quad in Enum.GetValues(typeof(Quadrant)))
 				yield return Utilities.GetQuadrant(cells, (Quadrant)quad);
 		}
-		public static IEnumerable<Cell[]> Columns(this Cell[,] cells)
+		public static IEnumerable<T[]> Columns<T>(this T[,] cells)
 		{
 			var width = cells.GetLength(1);
 			for (int i = 0; i < width; i++)
 				yield return Utilities.GetColumn(cells, i);
 		}
+		public static T GetRandom<T>(this List<T> someList)
+		{
+			if (someList == null || !someList.Any()) return default(T);
+			else return someList[Generator.Next(0, someList.Count)];
+		}
 
+		public static List<CellDTO> Compare(this int[,] board1, int[,] board2)
+		{
+			List<CellDTO> ret = new List<CellDTO>();
+			for (int r = 0; r < board1.GetLength(0); r++)
+			{
+				for (int c = 0; c < board1.GetLength(1); c++)
+				{
+					if (board1[r, c] != board2[r, c])
+						ret.Add(new CellDTO { Row = r, Column = c });
+				}
+			}
+			return ret;
+		}
 		//public static void ForEach(this Cell[,] cells, Action<Cell> action)
 		//{
 		//	for(int r = 0; r < cells.GetLength(0); r++)

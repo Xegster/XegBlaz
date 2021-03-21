@@ -73,21 +73,22 @@ namespace XegDoKu.Utilities
 			});
 			return ret;
 		}
-		public static Cell[] GetColumn(Cell[,] cells, int column)
+
+		public static T[] GetColumn<T>(T[,] cells, int column)
 		{
 			return Enumerable.Range(0, cells.GetLength(0))
 					.Select(x => cells[x, column])
 					.ToArray();
 		}
-		public static Cell[] GetRow(Cell[,] cells, int row)
+		public static T[] GetRow<T>(T[,] cells, int row)
 		{
 			return Enumerable.Range(0, cells.GetLength(1))
 					.Select(x => cells[row, x])
 					.ToArray();
 		}
-		public static Cell[,] GetQuadrant(Cell[,] cells, int row, int column)
+		public static T[,] GetQuadrant<T>(T[,] cells, int row, int column)
 		{
-			Cell[,] quad = new Cell[3, 3];
+			T[,] quad = new T[3, 3];
 			var rowSet = QuadSet(row);
 			var colSet = QuadSet(column);
 			for (int r = rowSet[0]; r <= rowSet[2]; r++)

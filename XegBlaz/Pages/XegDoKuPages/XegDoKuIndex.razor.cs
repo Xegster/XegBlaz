@@ -13,6 +13,9 @@ namespace XegBlaz.Pages.XegDoKuPages
 		public XegDoKuGame CurrentGame { get; set; }
 
 		public List<Board> Boards { get; set; } = new List<Board>();
+
+		public int BoardWidth { get; set; } = 3;
+
 		protected override async Task OnInitializedAsync()
 		{
 			var settings = new Settings()

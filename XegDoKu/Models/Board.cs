@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using XegDoKu.Utilities;
 using Utils = XegDoKu.Utilities.Utilities;
 namespace XegDoKu.Models
 {
 	public class Board
 	{
+		#region Properties
 		public Cell[,] Cells { get; set; }
 		public Settings CurrentSettings { get; set; }
 		public int Height { get { return (int)CurrentSettings.Size; } }
 		public int Width { get { return (int)CurrentSettings.Size; } }
-		private Random Generator { get; set; } = new Random();
 		public IEnumerable<Cell[,]> Quadrants
 		{
 			get
@@ -34,8 +33,12 @@ namespace XegDoKu.Models
 
 			}
 		}
+		#endregion
+		#region Fields
 		private List<int> FullList { get { return new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; } }
-
+		private Random Generator { get; set; } = new Random();
+		#endregion
+		#region Constructors
 		public Board(Board board)
 		{
 			CurrentSettings = board.CurrentSettings;
@@ -64,72 +67,27 @@ namespace XegDoKu.Models
 		{
 			CurrentSettings = settings;
 			Cells = Utils.BuildCells(settings.Size);
-			//Cells.Cast<Cell>().ToList().ForEach(cell => cell = new Cell());
-
-			//SetValues(Cells);
-
-			//var quads = GetQuadrant(Quadrant.UpperLeft).ToList().Union(GetQuadrant(Quadrant.MiddleMiddle).ToList()).Union(GetQuadrant(Quadrant.LowerRight).ToList());
-			//var target = quads.AsEnumerable().Where(cell => cell.Value == 0).OrderBy(cell => cell.PossibleValues.Count).FirstOrDefault();
-			//while (target != null)
-			//{
-			//	target.Value = CalculateRandomValue(target);
-			//	target = quads.AsEnumerable().Where(cell => cell.Value == 0).OrderBy(cell => cell.PossibleValues.Count).FirstOrDefault();
-			//}
-
-			//target = Cells.AsEnumerable().Where(cell => cell.Value == 0).OrderBy(cell => cell.PossibleValues.Count).FirstOrDefault();
-			//var possible = Cells.AsEnumerable().Where(cell => cell.Value == 0).Where(cell => cell.PossibleValues.Count > 0).ToList();
-			//while (target != null && possible.Count > 0)
-			//{
-			//	target.Value = CalculateRandomValue(target);
-			//	target = Cells.AsEnumerable().Where(cell => cell.Value == 0).OrderBy(cell => cell.PossibleValues.Count).FirstOrDefault();
-			//	possible = Cells.AsEnumerable().Where(cell => cell.Value == 0).Where(cell => cell.PossibleValues.Count > 0).ToList();
-			//}
-			//for (int i = 0; i < (Width * Height); i++)
-			//{
-			//	target = Cells.AsEnumerable().Where(cell => cell.Value == 0).OrderBy(cell => cell.PossibleValues.Count).FirstOrDefault();
-			//	target.Value = CalculateRandomValue(target);
-			//}
-
-			//foreach (var quadrant in Quadrants)
-			//{
-			//	foreach (var cell in quadrant.AsEnumerable().OrderBy(c => c.PossibleValues.Count).ToList())
-			//	{
-			//		if (cell.Value == 0)
-			//			cell.Value = CalculateRandomValue(cell);
-			//	}
-			//}
-			//Cells.ToList().ForEach(cell =>
-			//{
-			//	cell.Value = CalculateRandomValue(cell);
-			//});
 		}
+		#endregion
 
-		private void SetValues(Cell[,] cells)
+		#region Helpers
+		public List<CellDTO> CompareCellValues(Board board)
 		{
-			var target = cells.AsEnumerable().Where(cell => cell.Value == 0).OrderBy(cell => cell.PossibleValues.Count).FirstOrDefault();
-			while (target != null && target.PossibleValues.Count > 0)
+			List<CellDTO> mismatchedCells = new List<CellDTO>();
+			for (int r = 0; r < Height; r++)
 			{
-				target.Value = CalculateRandomValue(target);
-				while (cells.BrokenCells().Count > 0 && target.PossibleValues.Count > 0)
+				for (int c = 0; c < Width; c++)
 				{
-					target.ForbiddenValues.Add(target.Value);
-					target.Value = 0;
-					target.Value = CalculateRandomValue(target);
+					if (Cells[r, c].Value != board.Cells[r, c].Value)
+						mismatchedCells.Add(new CellDTO { Row = r, Column = c });
 				}
-				target = cells.AsEnumerable().Where(cell => cell.Value == 0).OrderBy(cell => cell.PossibleValues.Count).FirstOrDefault();
 			}
+			return mismatchedCells;
 		}
-
-		private int CalculateRandomValue(Cell cell)
-		{
-			return cell.PossibleValues[Generator.Next(0, cell.PossibleValues.Count)];
-		}
-
 		public Cell[] GetColumn(int column)
 		{
 			return Utils.GetColumn(Cells, column);
 		}
-
 		public Cell[] GetRow(int row)
 		{
 			return Utils.GetRow(Cells, row);
@@ -142,6 +100,6 @@ namespace XegDoKu.Models
 		{
 			return Utils.GetQuadrant(Cells, quad);
 		}
-
+		#endregion
 	}
 }

@@ -12,8 +12,10 @@ namespace XegDoKu
 			List<Cell> errors = new List<Cell>();
 			for (int i = 0; i < board.Width; i++)
 			{
-				errors.AddRange(VerifyCells(board.GetColumn(i)));
-				errors.AddRange(VerifyCells(board.GetRow(i)));
+				var col = board.GetColumn(i);
+				var row = board.GetRow(i);
+				errors.AddRange(VerifyCells(col));
+				errors.AddRange(VerifyCells(row));
 			}
 			foreach (var quadrant in board.Quadrants)
 			{
@@ -38,6 +40,7 @@ namespace XegDoKu
 		}
 
 		private static IEnumerable<int> FullList { get { return new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; } }
+
 
 	}
 }
