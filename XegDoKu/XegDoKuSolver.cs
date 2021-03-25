@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using XegDoKu.Interfaces;
 using XegDoKu.Models;
 using XegDoKu.Utilities;
@@ -53,7 +55,7 @@ namespace XegDoKu
 				SolverNotify.BoardAdded(board);
 				var clonedTarget = board.Cells.AsEnumerable().FirstOrDefault(cell => cell.Coordinate == target.Coordinate);
 				clonedTarget.Value = pv;
-				var newSolver = new XegDoKuSolver(board);
+				var newSolver = new XegDoKuSolver(board, SolverNotify);
 				var result = newSolver.Solve();
 				if (result.State == SolutionState.Solved)
 					return result;
@@ -64,6 +66,59 @@ namespace XegDoKu
 				State = SolutionState.Impossible,
 				SolvedBoard = Board
 			};
+		}
+
+		public Task<List<Solution>> SolveAsync()
+		{
+			return Task.Run(() =>
+			{
+				var modified = ApplyAllStrategies();
+				if (modified)
+					SolverNotify.BoardModified(Board);
+				CurrentState = CheckState();
+				var ret = new List<Solution>();
+				if (CurrentState != SolutionState.Processing)
+				{
+					ret.Add(new Solution
+					{
+						State = CurrentState,
+						SolvedBoard = Board
+					});
+					return ret;
+				}
+				List<Task<List<Solution>>> tasks = new List<Task<List<Solution>>>();
+				var target = Board.Cells.AsEnumerable().EmptyCells().OrderBy(cell => cell.Coordinate.Row).ThenBy(cell => cell.Coordinate.Column).First();
+				//foreach (var empty in empties)
+				//{
+					foreach (var pv in target.PossibleValues)
+					{
+						Board board = new Board(Board);
+						SolverNotify.BoardAdded(board);
+						var clonedTarget = board.Cells.AsEnumerable().FirstOrDefault(cell => cell.Coordinate == target.Coordinate);
+						clonedTarget.Value = pv;
+						var newSolver = new XegDoKuSolver(board, SolverNotify);
+						tasks.Add(newSolver.SolveAsync());
+					}
+				//}
+				while (tasks.Any(t => !t.IsCompleted))
+				{
+					var task = tasks.FirstOrDefault(t => !t.IsCompleted);
+					if (task != null)
+						task.Wait();
+				}
+				//ret.AddRange(tasks.SelectMany(t => t.Result).Where(s => s.State == SolutionState.Solved));
+
+				var allSolutions = tasks.SelectMany(t => t.Result).Where(s => s.State == SolutionState.Solved).ToList();
+				
+				foreach (var solution in allSolutions)
+				{
+					if (!ret.Any(sol => sol.SolvedBoard.CompareCellValues(solution.SolvedBoard).Count == 0))
+					{
+						ret.Add(solution);
+					}
+				}
+				return ret;
+			});
 		}
 
 		private SolutionState CheckState()

@@ -1,4 +1,5 @@
-﻿using XegDoKu.Models;
+﻿using System.Collections.Generic;
+using XegDoKu.Models;
 
 namespace XegDoKu.Utilities
 {

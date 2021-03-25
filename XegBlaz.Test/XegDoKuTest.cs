@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using XegBlaz.Test.Utilities;
 using XegDoKu;
 using XegDoKu.Models;
@@ -34,6 +36,43 @@ namespace XegBlaz.Test
 		public void Setup()
 		{
 			TestBoard = new Board(Settings.EasyStandard, TestSudoku);
+		}
+
+		[TestMethod]
+		public void TestAsync()
+		{
+			List<Task<List<Solution>>> tasks = new List<Task<List<Solution>>>();
+			var st = Stopwatch.StartNew();
+			TestNotify tn = new TestNotify();
+			for (int i = 0; i < 100; i++)
+			{
+				var rando = XegDoKuFactory.BuildBase(Settings.EasyStandard);
+				var randoBoard = new Board(Settings.EasyStandard, rando);
+				//SaveToJSON(randoBoard, ProblemJsonName);
+				var solver = new XegDoKuSolver(randoBoard, tn);
+				tasks.Add(solver.SolveAsync());
+			}
+
+			TimeSpan creationTime = TimeSpan.FromTicks(st.ElapsedTicks);
+			while (tasks.Any(t => !t.IsCompleted))
+			{
+				var task = tasks.FirstOrDefault(t => !t.IsCompleted);
+				if (task != null)
+					task.Wait();
+			}
+			st.Stop();
+			TimeSpan totalTime = TimeSpan.FromTicks(st.ElapsedTicks);
+			var uniqueSolutions = tasks.Where(t => t.Result.Count == 1).SelectMany(t => t.Result).ToList();
+			var uniqueCount = uniqueSolutions.Count;
+			var solutions = tasks.SelectMany(t => t.Result).ToList();
+			
+			var solvedSols = solutions.Where(s => s.State == SolutionState.Solved).ToList();
+			var solvedCount = solvedSols.Count;
+			var impossSols = solutions.Where(s => s.State != SolutionState.Solved).ToList();
+			var impossCount = impossSols.Count;
+			var boardCount = tn.BoardAddedCount;
+			var boardMod = tn.BoardModifiedCount;
+
 		}
 
 		[TestMethod]
