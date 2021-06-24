@@ -10,5 +10,10 @@ namespace XegDoKu.Utilities
 	{
 		public int Minimum { get; set; }
 		public int Maximum { get; set; }
+		private static Random Generator { get; set; } = new Random();
+		public int GetRandom()
+		{
+			return Generator.Next(Minimum, Maximum);
+		}
 	}
 }

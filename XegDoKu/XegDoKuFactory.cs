@@ -7,7 +7,6 @@ namespace XegDoKu
 {
 	public class XegDoKuFactory
 	{
-		private static Random Generator { get; set; } = new Random();
 		public static XegDoKuGame BuildBasicGame()
 		{
 			var game = new XegDoKuGame();
@@ -24,17 +23,16 @@ namespace XegDoKu
 
 			return game;
 		}
-
 		public static int[,] BuildBase(Settings settings)
 		{
 			var board = new Board(settings);
-			int clueCount = GetRandom(Settings.ClueCount(settings.Difficulty));
+			int clueCount = Settings.ClueCount(settings.Difficulty).GetRandom();
 			int currentClues = 0;
 			while (currentClues < clueCount)
 			{
 				var targets = board.Cells.AsEnumerable().Where(cell => cell.Value == 0 && cell.PossibleValues.Count > 0).ToList();
 				var target = targets.GetRandom();
-				target.Value = GetRandomValue(target);
+				target.Value = target.PossibleValues.GetRandom();
 				if (board.Cells.BrokenCells().Count > 0)
 				{
 					target.ForbiddenValues.Add(target.Value);
@@ -49,13 +47,5 @@ namespace XegDoKu
 				return board.Cells.ToValueArray();
 		}
 
-		private static int GetRandomValue(Cell cell)
-		{
-			return cell.PossibleValues.GetRandom();
-		}
-		private static int GetRandom(Utilities.Range range)
-		{
-			return Generator.Next(range.Minimum, range.Maximum);
-		}
 	}
 }
